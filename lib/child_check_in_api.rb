@@ -1,12 +1,19 @@
 require 'rubygems'
 require 'sinatra/base'
+require 'mongo_mapper'
+require 'json'
+
+MongoMapper.connection = Mongo::Connection.new('flame.local.mongohq.com', 27057, :pool_size => 5, :timeout => 5)
+MongoMapper.database = 'childcheckin'
+MongoMapper.database.authenticate('app', 'oWf5_Ly')
 
 module ChildCheckIn
   class API < Sinatra::Base
     set :sessions, false
     
     get '/' do
-      "Hello NSW!"
+      content_type :json
+      db.collection_names.to_json
     end
     
     # get teacher representation
