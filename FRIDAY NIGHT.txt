@@ -1,0 +1,32 @@
+Phil Harvey
+
+- Problem: Nashville Metro schools have a problem with child attendance... not the students who attend but those who don't show up for class.
+- Solution:
+		- Child Check In: then notifying parents accordingly that the child didn't show up (SMS, email, automated call)
+	- monetization: Parent-Teacher Associations could pay for it
+	- Competition: Google: chancery public schools attendance
+	- additional ideas: gamification (encourage kids to attend class, reward attendance with merit)
+
+===
+
+- teacher
+	- class
+		- child
+			- test
+				- score
+			- comment thread (for parent-teacher communication)
+
+- teacher front end
+	- fast data entry
+	- mobile app/website
+		- view roster
+			- child attendance check ins
+- parent front end
+	- check ins
+	- child score card
+	- updates via email
+
+- data back end
+	- post test score
+	- batch process data
+	- simple reports, simple teacher/class metrics
