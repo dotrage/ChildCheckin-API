@@ -1,3 +1,4 @@
+require 'system_timer'
 require 'mongo_mapper'
 
 require 'lib/models/attendance'
