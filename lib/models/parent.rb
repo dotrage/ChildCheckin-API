@@ -1,4 +1,4 @@
-require 'person'
+require 'lib/models/person'
 
 class Parent < Person
   key :phone_number, String, :required => true

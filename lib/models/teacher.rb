@@ -1,4 +1,4 @@
-require 'person'
+require 'lib/models/person'
 
 class Teacher < Person  
   key :school_id, ObjectId

@@ -1,4 +1,4 @@
-require 'person'
+require 'lib/models/person'
 
 class Student < Person
   key :parent_id, ObjectId

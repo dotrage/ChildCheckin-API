@@ -3,12 +3,7 @@ require 'sinatra/base'
 require 'mongo_mapper'
 require 'json'
 require 'pony'
-
-require 'lib/models/school'
-
-MongoMapper.connection = Mongo::Connection.new('flame.local.mongohq.com', 27057, :pool_size => 5, :timeout => 5)
-MongoMapper.database = 'childcheckin'
-MongoMapper.database.authenticate('app', 'oWf5_Ly')
+require 'lib/data_model'
 
 module ChildCheckIn
   class API < Sinatra::Base
@@ -46,9 +41,7 @@ module ChildCheckIn
     
     get '/' do
       content_type :json
-      { :foo => 'bar' }.to_json
-      
-      send_error_email('test', 'test')
+      School.first.teachers.to_json
     end
     
     # create school
