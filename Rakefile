@@ -1,4 +1,8 @@
-task :deploy do
+task :depends do
+  sh "bundle install"
+end
+
+task :deploy => [:depends] do
   sh "git push heroku"
 end
 
