@@ -7,6 +7,7 @@ gem 'json'
 gem 'chrisb-pony'
 gem 'chronic'
 gem 'SystemTimer'
+gem 'actionmailer'
 
 group :development do
   gem 'heroku'
