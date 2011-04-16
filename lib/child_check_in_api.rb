@@ -4,12 +4,16 @@ require 'mongo_mapper'
 require 'json'
 require 'pony'
 
+require 'lib/models/school'
+
 MongoMapper.connection = Mongo::Connection.new('flame.local.mongohq.com', 27057, :pool_size => 5, :timeout => 5)
 MongoMapper.database = 'childcheckin'
 MongoMapper.database.authenticate('app', 'oWf5_Ly')
 
 module ChildCheckIn
   class API < Sinatra::Base
+    set :sessions, false
+    
     helpers do
       def send_error_email(subject, html_body)
         Pony.mail(
@@ -40,13 +44,20 @@ module ChildCheckIn
       send_error_email('ChildCheckIn API Error: #{ex.message}', body)
     end
     
-    set :sessions, false
-    
     get '/' do
       content_type :json
       { :foo => 'bar' }.to_json
       
       send_error_email('test', 'test')
+    end
+    
+    # create school
+    post '/school' do
+      school = School.create({
+        :name => params[:name],
+        :location => params[:location],
+        :created => Time.now
+      })
     end
     
     # get teacher representation
