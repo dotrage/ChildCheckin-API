@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra/base'
 require 'mongo_mapper'
 require 'json'
+require 'pony'
 
 MongoMapper.connection = Mongo::Connection.new('flame.local.mongohq.com', 27057, :pool_size => 5, :timeout => 5)
 MongoMapper.database = 'childcheckin'
@@ -9,11 +10,43 @@ MongoMapper.database.authenticate('app', 'oWf5_Ly')
 
 module ChildCheckIn
   class API < Sinatra::Base
+    helpers do
+      def send_error_email(subject, html_body)
+        Pony.mail(
+          :to => 'childcheckin@gmail.com',
+          :from => 'childcheckin@gmail.com',
+          :subject => subject,
+          :body => html_body,
+          :via => :smtp,
+          :smtp => {
+            :host => 'smtp.gmail.com',
+            :port => '587',
+            :user => 'childcheckin@gmail.com',
+            :password => 'nsw3team6',
+            :auth => :plain,
+            :domain => 'childcheckin.heroku.com',
+            :tls => true
+          }
+        )
+      end
+    end
+    
+    error do
+      status 500
+      
+      # email the exception
+      ex = request.env['sinatra.error']
+      body = "<h3>Exception:</h3><p>#{e}</p><p>#{e.backtrace.join('<br />')}</p>"
+      send_error_email('ChildCheckIn API Error: #{ex.message}', body)
+    end
+    
     set :sessions, false
     
     get '/' do
       content_type :json
-      db.collection_names.to_json
+      { :foo => 'bar' }.to_json
+      
+      send_error_email('test', 'test')
     end
     
     # get teacher representation
