@@ -9,5 +9,6 @@ gem 'chronic'
 gem 'SystemTimer'
 
 group :development do
+  gem 'heroku'
   gem 'shotgun'
 end
