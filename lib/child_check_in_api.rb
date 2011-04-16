@@ -53,6 +53,10 @@ module ChildCheckIn
       })
     end
     
+    get '/school/:id' do
+      School.find(param[:id]).first.to_json
+    end
+    
     # get teacher representation
     get '/teacher/:id' do
       

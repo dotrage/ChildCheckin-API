@@ -6,9 +6,9 @@ gem 'bson_ext'
 gem 'json'
 gem 'chrisb-pony'
 gem 'chronic'
-gem 'SystemTimer'
 
 group :development do
   gem 'heroku'
   gem 'shotgun'
+  gem 'SystemTimer'
 end
