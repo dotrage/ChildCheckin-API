@@ -4,44 +4,26 @@ require 'mongo_mapper'
 require 'json'
 require 'pony'
 require 'lib/data_model'
+require 'lib/exception_reporter'
 
 module ChildCheckIn
   class API < Sinatra::Base
+    include Sinatra::ExceptionReporter
+    helpers Sinatra::ExceptionReporter::EmailHelper
+    
     set :sessions, false
-    
-    helpers do
-      def send_error_email(subject, html_body)
-        Pony.mail(
-          :to => 'childcheckin@gmail.com',
-          :from => 'childcheckin@gmail.com',
-          :subject => subject,
-          :body => html_body,
-          :via => :smtp,
-          :smtp => {
-            :host => 'smtp.gmail.com',
-            :port => '587',
-            :user => 'childcheckin@gmail.com',
-            :password => 'nsw3team6',
-            :auth => :plain,
-            :domain => 'childcheckin.heroku.com',
-            :tls => true
-          }
-        )
-      end
-    end
-    
+    set :raise_errors, Proc.new { false }
+    set :show_exceptions, false
+        
     error do
       status 500
-      
       # email the exception
-      ex = request.env['sinatra.error']
-      body = "<h3>Exception:</h3><p>#{e}</p><p>#{e.backtrace.join('<br />')}</p>"
-      send_error_email('ChildCheckIn API Error: #{ex.message}', body)
+      report_exception(request.env['sinatra.error'])
     end
     
     get '/' do
       content_type :json
-      School.first.teachers.to_json
+      School.first.teachers.to_jsonx
     end
     
     # create school
