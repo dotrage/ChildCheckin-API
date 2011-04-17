@@ -8,6 +8,8 @@ class UserToken
   
   timestamps!
   
+  belongs_to :person
+  
   #private
   def generate_user_token
     self.user_token = Digest::SHA1::hexdigest(rand(36**8).to_s(36))

@@ -5,4 +5,6 @@ class ClassRoom
   
   many :students
   many :attendences
+  
+  timestamps!
 end

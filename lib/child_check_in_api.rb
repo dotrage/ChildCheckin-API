@@ -26,10 +26,18 @@ module ChildCheckIn
     end
     
     helpers do
+      def get_user_token
+        headers['X-User-Token'] || params[:ut]
+      end
+      
+      def get_api_key
+        headers['X-API-Key'] || params[:api]
+      end
+      
       def require_user_token
         if !header.has_key?('X-User-Token')
           halt 403, "Access denied. Missing required user token header (X-User-Token)."
-        elseif validate_user_token(headers['X-User-Token']) == false
+        elseif validate_user_token(headers['X-User-Token']) == nil
           halt 403, "Access denied. Invalid or expired user token."
         end
       end
@@ -43,7 +51,7 @@ module ChildCheckIn
       end
       
       def validate_user_token(user_token)
-        UserToken.all({ :user_token => user_token }).empty? == false
+        UserToken.find({ :user_token => user_token })
       end
       
       def validate_api_key(api_key)
@@ -53,8 +61,16 @@ module ChildCheckIn
     end
     
     before do
-      require_api_key
+      #require_api_key
       require_user_token if request.path =~ /[^\/auth]/
+      
+      token = UserToken.first({ :user_token => get_user_token })
+      
+      if token
+        @user = token.person
+      else
+        halt 403, "Access denied. Invalid user token."
+      end
     end
     
     post '/auth' do
@@ -63,7 +79,8 @@ module ChildCheckIn
     
     get '/' do
       content_type :json
-      School.first.teachers.to_json
+      
+      "authenticated [#{@user.first_name}]."
     end
     
     get '/error' do
