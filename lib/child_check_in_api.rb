@@ -23,7 +23,11 @@ module ChildCheckIn
     
     get '/' do
       content_type :json
-      School.first.teachers.to_jsonx
+      School.first.teachers.to_json
+    end
+    
+    get '/error' do
+      i_dont_exist
     end
     
     # create school
