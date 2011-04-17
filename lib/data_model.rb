@@ -1,6 +1,7 @@
 require 'system_timer'
 require 'mongo_mapper'
 
+require 'lib/models/user_token'
 require 'lib/models/attendance'
 require 'lib/models/classroom'
 require 'lib/models/parent'

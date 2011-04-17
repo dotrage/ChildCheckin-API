@@ -14,7 +14,7 @@ module ChildCheckIn
     set :sessions, false
     set :raise_errors, Proc.new { false }
     set :show_exceptions, false
-        
+    
     error do
       status 500
       
@@ -23,6 +23,42 @@ module ChildCheckIn
       
       content_type :json
       { :error => 'Internal server error occurred.' }.to_json
+    end
+    
+    helpers do
+      def require_user_token
+        if !header.has_key?('X-User-Token')
+          halt 403, "Access denied. Missing required user token header (X-User-Token)."
+        elseif validate_user_token(headers['X-User-Token']) == false
+          halt 403, "Access denied. Invalid or expired user token."
+        end
+      end
+      
+      def require_api_key
+        if !headers.has_key?('X-API-Key')
+          halt 403, "Access denied. Missing required API key (X-API-Key)."
+        elseif validate_api_key(headers['X-API-Key']) == false
+          halt 403, "Access denied. Invalid API key."
+        end
+      end
+      
+      def validate_user_token(user_token)
+        UserToken.all({ :user_token => user_token }).empty? == false
+      end
+      
+      def validate_api_key(api_key)
+        #APIKey.all({ :api_key => api_key}).empty? == false
+        api_key == 'f1db1a24794120734e5ff2c6f2f2833f19f0c20f'
+      end
+    end
+    
+    before do
+      require_api_key
+      require_user_token if request.path =~ /[^\/auth]/
+    end
+    
+    post '/auth' do
+      
     end
     
     get '/' do
