@@ -17,8 +17,12 @@ module ChildCheckIn
         
     error do
       status 500
+      
       # email the exception
       report_exception(request.env['sinatra.error'])
+      
+      content_type :json
+      { :error => 'Internal server error occurred.' }.to_json
     end
     
     get '/' do
