@@ -1,4 +1,4 @@
-require 'ruby-debug'
+require 'rack'
 require 'rubygems'
 require 'sinatra/base'
 require 'mongo_mapper'
@@ -15,6 +15,10 @@ module ChildCheckIn
     set :sessions, false
     set :raise_errors, Proc.new { false }
     set :show_exceptions, false
+    
+    configure :development do
+      require 'ruby-debug'
+    end
     
     error do
       status 500
@@ -74,7 +78,6 @@ module ChildCheckIn
       if token
         @user = token.person
       else
-        debugger
         halt 403, "Access denied. Invalid user token."
       end
     end
