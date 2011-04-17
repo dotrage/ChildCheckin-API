@@ -13,4 +13,5 @@ gem 'tmail'
 group :development do
   gem 'heroku'
   gem 'shotgun'
+  gem 'ruby-debug'
 end

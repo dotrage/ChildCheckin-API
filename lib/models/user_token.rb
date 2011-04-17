@@ -5,7 +5,6 @@ class UserToken
   
   key :user_token, String, :required => true
   key :person_id, ObjectId, :required => true
-  
   timestamps!
   
   belongs_to :person
